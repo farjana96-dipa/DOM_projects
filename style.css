@@ -39,3 +39,67 @@
     background-color: transparent;
     color:white;
 }
+input[type="text"]{
+    padding: 5px 12px;
+    border: 1px solid #fff;
+    color: #fff;
+    background-color: transparent;
+    margin-bottom: 15px;
+    font-size: 18px;
+    line-height: 32px;
+    font-weight: bold;
+    display: inline-block;
+}
+.copy_btn{
+    padding: 5px 12px;
+    background-color: #fff;
+    color: #000;
+    background-color: transparent;
+    margin-bottom: 15px;
+    font-size: 18px;
+    line-height: 32px;
+    font-weight: bold;
+    display: inline-block;
+    cursor: pointer;
+}
+.toast-message{
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    border: 1px solid #fff;
+    color : #fff;
+    border-radius: 5px;
+    padding: 8px 12px;
+    background-color: transparent;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.toast-message-slide-in{
+    animation: toast-animation-in  0.3s ease-in;
+}
+.toast-message-slide-out{
+    animation: toast-animation-out  0.3s ease-in;
+}
+
+@keyframes toast-animation-in {
+    from{
+        transform: translateX(200px);
+        opacity: 0;
+    }
+    to{
+        transform: translateX(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes toast-animation-out {
+    from{
+        transform: translateX(0px);
+        opacity: 1;
+    }
+    to{
+        transform: translateX(200px);
+        opacity: 0;
+    }
+    
+}
