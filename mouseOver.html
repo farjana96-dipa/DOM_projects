@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0px;
+            background-color: rgb(56,220, 250);
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+
+
+    <script>
+    
+        var canvas = document.getElementById("canvas");
+        var c = canvas.getContext("2d");
+        var tx = window.innerWidth;
+        var ty = window.innerHeight;
+        canvas.width = tx;
+        canvas.height = ty;
+
+        c.strokeWidth = 5;
+        var grab = 0.99;
+
+        var mousex = 0;
+        var mousey = 0;
+        addEventListener("mousemove", function(){
+            mousex = event.clientX;
+            mousey = event.clientY;
+        });
+
+        function randomColor(){
+            return(
+                "rgba(" + Math.round(Math.random()*250) + "," + Math.round(Math.random()*250) + "," + Math.round(Math.random()*250) + "," + Math.ceil(Math.random()*10)/10 + ")"
+            );
+        }
+
+        function Ball(){
+            this.color = randomColor();
+            this.radius = Math.random() * 20 + 14;
+            this.startradius = this.radius;
+            this.x = Math.random() * (tx - this.radius * 2) + this.radius;
+            this.y = Math.random() * (ty - this.radius);
+            this.dy = Math.random() * 2;
+            this.dx = Math.round((Math.random() - 0.5) * 10);
+            this.vel = Math.random() /5;
+            this.update = function() {
+                c.beginPath();
+                c.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+                c.fillStyle = this.color;
+                c.fill();
+                //c.stroke();
+            };
+                    
+        }
+            var ball = [];
+            for(var i = 0; i<50; i++){
+                ball.push(new Ball());
+            }
+
+            function animate(){
+                if(tx!= window.innerWidth ||  ty!= window.innerHeight){
+                    var tx = window.innerWidth;
+                    var ty = window.innerHeight;
+                    canvas.width = tx;
+                    canvas.height = ty;
+                }
+                requestAnimationFrame(animate);
+                c.clearRect(0,0,tx,ty);
+                for(var i = 0 ; i<ball.length ; i++){
+                    ball[i].update();
+                    ball[i].x = ball[i].x + ball[i].dx;
+                    ball[i].y = ball[i].y + ball[i].dy;
+                    if(ball[i].y + ball[i].radius >= ty){
+                        ball[i].dy = -ball[i].dy * grab;
+                    }
+                    else{
+                        ball[i].dy += ball[i].vel;
+                    }
+                    if(ball[i].x + ball[i].radius > tx || ball[i].x - ball[i].radius < 0){
+                        ball[i].dx = -ball[i].dx;
+                    }
+
+                    if((mousex > ball[i].x -20) && (mousex < ball[i].x +20) && (mousey > ball[i].y -50) && (mousey < ball[i].y + 50) && (ball[i].radius < 70)){
+                        ball[i].radius += 5;
+                    }
+                    else if(ball[i].radius > ball[i].startradius){
+                        ball[i].radius += -5;
+                    }
+                }
+            }
+
+            animate();
+
+            setInterval(function(){
+                ball.push(new Ball());
+                ball.splice(0,1);
+            },4000);
+    
+
+
+    </script>
+    
+</body>
+</html>
