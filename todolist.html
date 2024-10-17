@@ -3,140 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List</title>
+    <title>To Do List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/fontawesome.min.css">
     <style>
-        body {
-            background: #04A1BF;
-            text-align: center;
-            font-family: 'Open Sans', sans-serif;
+        *,
+        *::before,
+        *::after{
+            padding: 0;
+            margin:0;
+            box-sizing: border-box;
         }
-        .row{
-            width: 100%;
-            max-width: 800px;
-            padding:10px 30px;
-            margin:0 auto;
+        body{
+            height: 100vh;
+            background: linear-gradient(135deg, #8052ec, #d161ff);
         }
-        h1 {
-            color: #ffffff;
-            text-transform: uppercase;
-            font-weight: 800;
+        #container{
+            
+            border-radius: 8px;
+            width:40%;
+            max-width: 350px;
+            position: absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
         }
-
-        p {
-            font-weight: 600;
-        }
-        .first1{
-            margin-top: 10px;
-            color: #FFCD5D;
-        }
-
-        .first2{
-            color: #51DF70;
-
-        }
-
-        .first3{
-            color: #025F70;
-            margin-bottom: 30px;
-        }
-        #enter {
-            border: none;
-            padding: 10px 15px;
+        #newtask{
+            background-color: #fff;
+            padding: 30px 20px;
             border-radius: 5px;
-            color: #04A1BF;
-            background-color: #025F70;
-            transition: all 0.75s ease;
-            -webkit-transition: all 0.75s ease;
-            -moz-transition: all 0.75s ease;
-            -ms-transition: all 0.75s ease;
-            -o-transition: all 0.75 ease;
-            font-weight: normal;
+            box-shadow: 0px 15px 30px rgba(0,0,0,0.3);
+        }
+        #newtask input{
+            width:70%;
+            height:45px;
+            font-size:15px;
+            font-weight: 500;
+            padding:12px;
+            border:1px solid #d1d3d4;
+            color: #111111;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        #newtask button{
+            position:relative;
+            width:20%;
+            height:45px;
+            font-size:16px;
+            font-weight: 500;
+            border-radius: 5px;
+            background: #8052ec;
+            color:#fff;
+            border:none;
+            float:right;
             cursor: pointer;
         }
-
-        #enter:hover{
-            background-color: #02798F;
-            color: #FFCD5D;
+        #newtask input:focus{
+            outline: none;
+            border-color: #8052ec;
         }
-
-        ul {
-            text-align: left;
-            margin-top: 20px;
+        #tasks{
+            width: 100%;
+            background-color: #fff;
+            padding:20px 30px;
+            border-radius: 10px;
+            margin-top:60px;
+            box-shadow: 0px 15px 30px rgba(0,0,0,0.3);
+            position: relative;
         }
-
-
-        li {
-            list-style: none;
-            padding: 10px 20px;
-            color: #ffffff;
-            text-transform: capitalize;
-            font-weight: 600;
-            border: 2px solid #025f70;
+        .task{
+            background-color: #fff;
+            padding: 5px 10px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            border-bottom: 2px solid #d1d3d4;
+        }
+        .task button{
+            background: #8052ec;
+            padding:10px;
             border-radius: 5px;
-            margin-bottom: 10px;
-            background: #4EB9CD;
-            transition: all 0.75s ease;
-            -webkit-transition: all 0.5s ease;
-            -moz-transition: all 0.5s ease;
-            -ms-transition: all 0.5s ease;
-            -o-transition: all 0.5 ease;
+            outline:none;
+            border:none;
+            color:#fff;
+            cursor: pointer;
         }
-
-        li:hover {
-            background: #76CFE0;
-        }
-
-        li > button {
-            font-weight: normal;
-            background: none;
-            border: none;
-            float: right;
-            color: #025f70;
-            font-weight: 800;
-        }
-
-        input {
-            border-radius: 5px;
-           width:100%;
-           max-width: 600px;
-            padding: 10px;
-            border: none;
-        }
-
-
-        .done {
-            background: #51DF70 !important;
-            color: #00891E;
-        }
-
-        .delete {
-            display: none;
+        .completed{
+            text-decoration: line-through;
         }
     </style>
 </head>
 <body>
-    <div class="row">
-        <div class="col-12">
-            <h1>Work To-Dos</h1>
-            <p class="first1">Enter text into the input field to add new to-do list</p>
-            <p class="first2" >click the item to mark it is complete.</p>
-            <p class="first3" >Click the "X" to remove the item from your list.</p>
+    <div id="container">
+        <div id="newtask">
+            <input type="text" placeholder="task to be done..">
+            <button id="push">ADD</button>
         </div>
+        <div id="tasks"></div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <input id="userInput" type="text" placeholder="New item..." maxlength="27">
-            <button id="enter">Enter</button>
-        </div>
-    </div>
+    <script>
+        document.querySelector('#push').onclick = function(){
+            if(document.querySelector('#newtask input').value.length == 0){
+                alert('Please enter a task');
+            }
+        else{
+            document.querySelector("#tasks").innerHTML += `
+                <div class = "task">
+                    <span id="taskname">${document.querySelector('#newtask input').value}</span> 
+                    <button class="delete"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+  <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+</svg></button>
+                </div>
+            `;
 
-    <div class="row">
-        <div class="listItems col-12">
-            <ul class="col-12 offset-0"></ul>
-        </div>
-    </div>
+            var cur_task = document.querySelectorAll('.delete');
 
-    <script src="todolist.js"></script>
+            for(var i = 0; i<cur_task.length; i++){
+                cur_task[i].onclick = function(){
+                    this.parentNode.remove();
+                }
+            }
+
+            var tasks = document.querySelectorAll('.task');
+            for(var i =0; i<tasks.length;i++){
+                tasks[i].onclick = function(){
+                    this.classList.toggle('completed');
+                }
+            }
+
+            document.querySelector("#newtask input").value = "";
+        }
+            
+        }
+    </script>
 </body>
 </html>
